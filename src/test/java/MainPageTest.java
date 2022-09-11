@@ -1,9 +1,8 @@
-import com.codeborne.selenide.Config;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import org.junit.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import io.qameta.allure.junit4.DisplayName;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import pages.MainPage;
 import pages.RegistrationPage;
 
@@ -14,7 +13,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 //@RunWith(Parameterized.class)
 public class MainPageTest {
-//    private final String testBrowser;
+    //    private final String testBrowser;
 //
 //    public MainPageTest(String testBrowser) {
 //        this.testBrowser = testBrowser;
@@ -27,7 +26,6 @@ public class MainPageTest {
 //                {"firefox"}, // передали тестовые данные
 //        };
 //    }
-
     @Before
     public void setUp() {
 //        Configuration.browser = testBrowser;
@@ -35,26 +33,26 @@ public class MainPageTest {
         WebDriverRunner.getWebDriver().manage().window().maximize();
     }
     @After
-    public void tearDown(){
+    public void tearDown() {
         webdriver().driver().close();
     }
-
     @Test
+    @DisplayName("Переключение на вкладку Булки")
     public void checkBunTab() {
         MainPage mainPage = open("https://stellarburgers.nomoreparties.site", MainPage.class);
         mainPage.clickSauceTab();
         mainPage.clickBunTab();
         assertThat(mainPage.isBunTab(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Переключение на вкладку Соусы")
     public void checkSauceTab() {
         MainPage mainPage = open("https://stellarburgers.nomoreparties.site", MainPage.class);
         mainPage.clickSauceTab();
         assertThat(mainPage.isSauceTab(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Переключение на вкладку Начинки")
     public void checkIngredientTab() {
         MainPage mainPage = open("https://stellarburgers.nomoreparties.site", MainPage.class);
         mainPage.clickIngredientTab();

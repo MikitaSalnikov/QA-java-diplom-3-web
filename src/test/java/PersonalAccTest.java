@@ -1,18 +1,16 @@
 import api.client.CustomerClient;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runners.Parameterized;
 import pages.LoginPage;
 import pages.MainPage;
 import pages.PersonalPage;
 import pages.RegistrationPage;
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -33,7 +31,6 @@ public class PersonalAccTest {
 //                {"firefox"}, // передали тестовые данные
 //        };
 //    }
-
     @Before
     public void setUp() {
 //        Configuration.browser = testBrowser;
@@ -43,7 +40,6 @@ public class PersonalAccTest {
         CustomerClient customerClient = new CustomerClient();
         customerClient.createCustomer(email, pass);
     }
-
     @After
     public void tearDown() {
         RestAssured.baseURI = "https://stellarburgers.nomoreparties.site/";
@@ -53,31 +49,31 @@ public class PersonalAccTest {
         } catch (Exception e) {
         }
     }
-
     @Test
+    @DisplayName("Входа в личный кабинет пользователя")
     public void enterPersonalAccount() {
         PersonalPage personalPage = new PersonalPage();
         personalPage = personalPage.AuthInPersonalAccount(email, pass);
         assertThat(personalPage.isPersonalAccount(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Переход в Конструктор из личного кабинета")
     public void checkLinkToConstructorFromPersonalAcc() {
         PersonalPage personalPage = new PersonalPage();
         personalPage = personalPage.AuthInPersonalAccount(email, pass);
         MainPage mainPage = personalPage.clickConstructorInHeader();
         assertThat(mainPage.isAuthorizedUserOnMain(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Переход на главную страницу из личного кабинета")
     public void checkLinkToMainLogoFromPersonalAcc() {
         PersonalPage personalPage = new PersonalPage();
         personalPage = personalPage.AuthInPersonalAccount(email, pass);
         MainPage mainPage = personalPage.clickLogoInHeader();
         assertThat(mainPage.isAuthorizedUserOnMain(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Разавторизация из личного кабинета")
     public void checkLogout() {
         PersonalPage personalPage = new PersonalPage();
         personalPage = personalPage.AuthInPersonalAccount(email, pass);

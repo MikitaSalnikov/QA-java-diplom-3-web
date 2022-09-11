@@ -1,12 +1,10 @@
 import api.client.CustomerClient;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runners.Parameterized;
 import pages.LoginPage;
 import pages.MainPage;
 import pages.RegistrationPage;
@@ -32,7 +30,6 @@ public class AuthTest {
 //                {"firefox"}, // передали тестовые данные
 //        };
 //    }
-
     @Before
     public void setUp() {
 //        Configuration.browser = testBrowser;
@@ -42,7 +39,6 @@ public class AuthTest {
         CustomerClient customerClient = new CustomerClient();
         customerClient.createCustomer(email, pass);
     }
-
     @After
     public void tearDown() {
         RestAssured.baseURI = "https://stellarburgers.nomoreparties.site/";
@@ -52,32 +48,32 @@ public class AuthTest {
         } catch (Exception e) {
         }
     }
-
     @Test
+    @DisplayName("Авторизация через Войти в аккаунт на главной")
     public void checkLoginFromMainPage() {
         MainPage mainPage = open("https://stellarburgers.nomoreparties.site", MainPage.class);
         LoginPage loginPage = mainPage.clickEnterAccauntButton();
         mainPage = loginPage.auth(email, pass);
         assertThat(mainPage.isAuthorizedUserOnMain(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Авторизация через Личный кабинет в шапке сайта")
     public void checkLoginFromHeader() {
         LoginPage loginPage = open("https://stellarburgers.nomoreparties.site", LoginPage.class);
         loginPage.clickPersonalInHeader();
         MainPage mainPage = loginPage.auth(email, pass);
         assertThat(mainPage.isAuthorizedUserOnMain(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Авторизация через ссылку Войти со страницы регистрации")
     public void checkLoginFromPassReg() {
         RegistrationPage registrationPage = open("https://stellarburgers.nomoreparties.site/register", RegistrationPage.class);
         LoginPage loginPage = registrationPage.clickEnterAuthButton();
         MainPage mainPage = loginPage.auth(email, pass);
         assertThat(mainPage.isAuthorizedUserOnMain(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Авторизация через ссылку Войти со страницы посстановления пароля")
     public void checkLoginFromPassReset() {
         RegistrationPage registrationPage = open("https://stellarburgers.nomoreparties.site/forgot-password", RegistrationPage.class);
         LoginPage loginPage = registrationPage.clickEnterAuthButton();

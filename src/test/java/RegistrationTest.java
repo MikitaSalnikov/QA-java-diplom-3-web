@@ -1,22 +1,14 @@
 import api.client.CustomerClient;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import pages.LoginPage;
 import pages.RegistrationPage;
-import com.codeborne.selenide.WebDriverRunner;
-
-import java.lang.reflect.Executable;
 
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -24,7 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class RegistrationTest {
     String email = "rick@morthy.dg";
     String pass = "password";
-//    private final String testBrowser;
+    //    private final String testBrowser;
 //
 //    public RegistrationTest(String testBrowser) {
 //        this.testBrowser = testBrowser;
@@ -37,14 +29,12 @@ public class RegistrationTest {
 //                {"firefox"}, // передали тестовые данные
 //        };
 //    }
-
     @Before
     public void setUp() {
 //        Configuration.browser = testBrowser;
         RegistrationPage page = open("https://stellarburgers.nomoreparties.site/register", RegistrationPage.class);
         WebDriverRunner.getWebDriver().manage().window().maximize();
     }
-
     @After
     public void tearDown() {
         RestAssured.baseURI = "https://stellarburgers.nomoreparties.site/";
@@ -54,15 +44,15 @@ public class RegistrationTest {
         } catch (Exception e) {
         }
     }
-
     @Test
+    @DisplayName("Корректная регистрация")
     public void checkCorrectRegistration() {
         RegistrationPage page = open("https://stellarburgers.nomoreparties.site/register", RegistrationPage.class);
         LoginPage loginPage = page.registration("Richard", email, pass);
         assertThat(loginPage.isLoginTitle(), equalTo(true));
     }
-
     @Test
+    @DisplayName("Ошибка при регистрации с паролем менее 6 символов")
     public void checkShortPassError() {
         RegistrationPage page = open("https://stellarburgers.nomoreparties.site/register", RegistrationPage.class);
         page.registration("Richard", email + "r", "passw");
